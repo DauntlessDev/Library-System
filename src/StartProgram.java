@@ -5,6 +5,8 @@ public class StartProgram {
 		// create an object of the Home(the login) and make it visible
 		Home home = new Home();
 		home.setVisible(true);
+	
 	}
 
 }
+

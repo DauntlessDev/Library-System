@@ -39,7 +39,7 @@ import java.awt.Toolkit;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 
-public class Dashboard extends JFrame implements InputValidator {
+public class BooksDashboard extends JFrame implements InputValidator {
 	// set the serialVersion UID to default
 	private static final long serialVersionUID = 1L;
 	// declare variables needed for the GUI
@@ -50,7 +50,7 @@ public class Dashboard extends JFrame implements InputValidator {
 	boolean searched = false; // for search button condition
 
 	// constructor
-	public Dashboard() {
+	public BooksDashboard() {
 		//set main design and settings
 		setForeground(new Color(0, 0, 0));
 		setTitle("Library System");
@@ -106,7 +106,7 @@ public class Dashboard extends JFrame implements InputValidator {
 		acmLabel.setBounds(32, 13, 111, 16);
 		middleBluePanel.add(acmLabel);
 		
-		JLabel memberLabel = new JLabel("User Dashboard");
+		JLabel memberLabel = new JLabel("Books Dashboard");
 		memberLabel.setForeground(Color.DARK_GRAY);
 		memberLabel.setBounds(22, 13, 237, 23);
 		memberLabel.setFont(new Font("SansSerif", Font.BOLD, 17));
@@ -132,35 +132,41 @@ public class Dashboard extends JFrame implements InputValidator {
 
 	
 		//for the settings, location, text, color, etc of buttons
-		JButton addButton = new JButton("ADD USER");
+		JButton addButton = new JButton("ADD BOOKS");
 		addButton.setBackground(Color.WHITE);
 		addButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		addButton.setBounds(30, 195, 120, 30);
 		leftBluePanel.add(addButton);
 
-		JButton updateButton = new JButton("EDIT USER");
+		JButton updateButton = new JButton("EDIT BOOKS");
 		updateButton.setBackground(Color.WHITE);
 		updateButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		updateButton.setBounds(30, 235, 120, 30);
 		leftBluePanel.add(updateButton);
 
-		JButton deleteButton = new JButton("DELETE USER");
+		JButton deleteButton = new JButton("DELETE BOOKS");
 		deleteButton.setBackground(Color.WHITE);
 		deleteButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		deleteButton.setBounds(30, 275, 120, 30);
 		leftBluePanel.add(deleteButton);
 
-		JButton sortButton = new JButton("SORT USERS");
+		JButton sortButton = new JButton("SORT BOOKS");
 		sortButton.setBackground(Color.WHITE);
 		sortButton.setFont(new Font("Tahoma", Font.BOLD, 10));
 		sortButton.setBounds(30, 315, 120, 30);
 		leftBluePanel.add(sortButton);
 		
-		JButton changeBooks = new JButton("CHECK BOOKS ");
-		changeBooks.setFont(new Font("Tahoma", Font.BOLD, 10));
-		changeBooks.setBackground(Color.WHITE);
-		changeBooks.setBounds(30, 355, 120, 30);
-		leftBluePanel.add(changeBooks);
+		JButton changeUsers = new JButton("CHECK USERS");
+		changeUsers.setFont(new Font("Tahoma", Font.BOLD, 10));
+		changeUsers.setBackground(Color.WHITE);
+		changeUsers.setBounds(30, 355, 120, 30);
+		leftBluePanel.add(changeUsers);
+		
+		JButton addAuthor = new JButton("ADD AUTHOR");
+		addAuthor.setFont(new Font("Tahoma", Font.BOLD, 10));
+		addAuthor.setBackground(Color.WHITE);
+		addAuthor.setBounds(30, 395, 120, 30);
+		leftBluePanel.add(addAuthor);
 
 		JButton searchButton = new JButton("");
 		searchButton.setToolTipText("Search");
@@ -192,9 +198,8 @@ public class Dashboard extends JFrame implements InputValidator {
 		};
 
 		// set columns to this values
-		Object[] columns = { "Login ID.","User Type", "First Name", "Last Name", "Middle Name","House No.","Street"
-				,"City", "Country","Can Borrow",
-				"Books Borrowed", "Fine" };
+		Object[] columns = { "ISBN Number.","Book Title", "Publication Year",
+				"Author ID", "Shelf ID","Copy No."};
 		model.setColumnIdentifiers(columns);
 		table.setModel(model);
 		scrollPane.setViewportView(table); // add table to view
@@ -207,26 +212,19 @@ public class Dashboard extends JFrame implements InputValidator {
 		table.getColumnModel().getColumn(3).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(4).setCellRenderer(centerRenderer);
 		table.getColumnModel().getColumn(5).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(6).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(7).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(8).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(9).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(1).setPreferredWidth(120);
-		table.getColumnModel().getColumn(10).setCellRenderer(centerRenderer);
-		table.getColumnModel().getColumn(11).setCellRenderer(centerRenderer);
 		// Add button - for adding new row
 		// create Add window and remove window decoration
 		addButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AddWindow aw = new AddWindow();
+				AddBooks aw = new AddBooks();
 				aw.setUndecorated(true);
 				aw.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 				aw.setVisible(true);
 			}
 		});
 		// create update window to get ready if used just in case
-		UpdateWindow uw = new UpdateWindow();
+		UpdateBooks uw = new UpdateBooks();
 		uw.setUndecorated(true);
 		uw.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
 
@@ -241,18 +239,10 @@ public class Dashboard extends JFrame implements InputValidator {
 				int i = table.getSelectedRow();
 
 				try {// try to get value of each row and set it to the textfields if null then catch
-					uw.fnameField.setText(model.getValueAt(i, 2).toString());
-					uw.lnameField.setText(model.getValueAt(i, 3).toString());
-					uw.mNameField.setText(model.getValueAt(i, 4).toString());
-					uw.houseField.setText(model.getValueAt(i, 5).toString());
-					uw.streetField.setText(model.getValueAt(i, 6).toString());
-					uw.cityField.setText(model.getValueAt(i, 7).toString());
-					uw.countryField.setText(model.getValueAt(i, 8).toString());
-//					uw.borrowComboBox.setValue(model.getValueAt(i,9));
-//					uw.numComboBox.setValue(model.getValueAt(i,10));
-//					uw.borrowComboBox.setText(model.getValueAt(i, 9).toString());
-//					uw.numComboBox.setText(model.getValueAt(i, 10).toString());
-					uw.fineField.setText(model.getValueAt(i, 11).toString());
+					uw.isbnField.setText(model.getValueAt(i, 0).toString());
+					uw.titleField.setText(model.getValueAt(i, 1).toString());
+					uw.yearField.setText(model.getValueAt(i, 2).toString());
+					uw.copyField.setText(model.getValueAt(i, 5).toString());
 				} catch (NullPointerException e1) {
 				}
 			}
@@ -354,11 +344,22 @@ public class Dashboard extends JFrame implements InputValidator {
 
 			}
 		});
-		changeBooks.addActionListener(new ActionListener() {
+		
+		changeUsers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				BooksDashboard ad = new BooksDashboard();
+				Dashboard ad = new Dashboard();
 				ad.setVisible(true);
 				dispose();
+			}
+		});
+		
+		addAuthor.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				AddAuthor ad = new AddAuthor();
+
+				ad.setUndecorated(true);
+				ad.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+				ad.setVisible(true);
 			}
 		});
 	}

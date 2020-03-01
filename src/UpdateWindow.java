@@ -1,37 +1,59 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+
+import java.awt.Color;
+import java.awt.Font;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JButton;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import javax.swing.SwingConstants;
+import javax.swing.JPasswordField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerNumberModel;
 
-// this window has very similar design as add window but very different workings in behind
-public class UpdateWindow extends JFrame implements InputValidator {
-	// declare variables need for the update windows
-	// set the serial id to default
+public class UpdateWindow extends JFrame {
+	// declare variables need for the add window
+	Integer counter = 1;
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	JTextField memberNum;
 	JTextField fnameField;
-	JTextField lnameField;
-	JTextField emailField;
-	JTextField textMemtype;
+	 JTextField lnameField;
+	JTextField houseField;
+	JTextField streetField;
+	JTextField mNameField;
+	JTextField cityField;
+	JSpinner borrowComboBox;
+	JSpinner numComboBox;
+	JTextField countryField;
+	private JLabel lblHouseNo;
+	private JLabel lblStreet;
+	private JLabel lblCity;
+	private JLabel lblCountry;
+	private JLabel canborrowLbl;
+	private JLabel lblPassword;
+	private JLabel lblConfirm;
+	private JLabel lblUserDetails;
+	private JLabel lblMiddleName;
+	JTextField fineField;
 
 	// constructor
 	public UpdateWindow() {
-		setAlwaysOnTop(true);
-		setType(Type.POPUP); // set to pop up type
-		setTitle("Update row");
+		//setAlwaysOnTop(true); // same as the previous windows settings
+		setType(Type.POPUP); // but set to pop up type
+		setTitle("Add row");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 589, 357);
+		setBounds(100, 100, 593, 708);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -39,50 +61,39 @@ public class UpdateWindow extends JFrame implements InputValidator {
 		setContentPane(contentPane);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		
 
-		// blue panel for modern look design
+		// create labels and set fonts and size
+		JLabel firstnameLabel = new JLabel("First Name:");
+		firstnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		firstnameLabel.setBounds(32, 88, 147, 16);
+		contentPane.add(firstnameLabel);
+
+		JLabel lastnameLabel = new JLabel("Last Name:");
+		lastnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lastnameLabel.setBounds(32, 137, 122, 16);
+		contentPane.add(lastnameLabel);
+
+		JLabel emailLabel = new JLabel("Full Address");
+		emailLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		emailLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		emailLabel.setBounds(314, 222, 117, 16);
+		contentPane.add(emailLabel);
+
+		// create blue panel for design
 		JPanel bluePanel = new JPanel();
-		bluePanel.setBackground(new Color(34, 139, 34));
+		bluePanel.setBackground(new Color(0, 100, 0));
 		bluePanel.setBounds(0, 0, 590, 53);
 		contentPane.add(bluePanel);
 		bluePanel.setLayout(null);
 
-		// initialize labels and set string values,dimension and design
-		JLabel fnameLabel = new JLabel("First Name:");
-		fnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		fnameLabel.setBounds(32, 88, 147, 16);
-		contentPane.add(fnameLabel);
+		// label for the header of the window
+		JLabel addMemberLabel = new JLabel("UPDATE USER ");
+		addMemberLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
+		addMemberLabel.setBounds(230, 0, 153, 53);
+		addMemberLabel.setForeground(new Color(255, 255, 255));
+		bluePanel.add(addMemberLabel);
 
-		JLabel lnameLabel = new JLabel("Last Name:");
-		lnameLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lnameLabel.setBounds(32, 137, 122, 16);
-		contentPane.add(lnameLabel);
-
-		JLabel emailLabel = new JLabel("Email Address");
-		emailLabel.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		emailLabel.setBounds(32, 186, 117, 16);
-		contentPane.add(emailLabel);
-		
-		JLabel lblMembershipType = new JLabel("Membership Type:");
-		lblMembershipType.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblMembershipType.setBounds(32, 235, 168, 16);
-		contentPane.add(lblMembershipType);
-
-		JLabel lblAddAMember = new JLabel("UPDATE PATRON INFORMATION");
-		lblAddAMember.setFont(new Font("SansSerif", Font.BOLD, 16));
-		lblAddAMember.setBounds(158, 0, 272, 53);
-		lblAddAMember.setForeground(new Color(255, 255, 255));
-		bluePanel.add(lblAddAMember);
-
-
-		// initialize listbox
-		JSpinner memtypeSpinner = new JSpinner(new SpinnerListModel(new String[] { "Chapter Member", "Chapter Officer" }));
-		memtypeSpinner.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		memtypeSpinner.setBounds(172, 226, 385, 36);
-		contentPane.add(memtypeSpinner);
-
-		// initialize textfields and set string values,dimension and design
+		// create text fields and set the inputs' font and size
 		fnameField = new JTextField();
 		fnameField.setToolTipText("First name should start with capital letter");
 		fnameField.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -96,29 +107,121 @@ public class UpdateWindow extends JFrame implements InputValidator {
 		lnameField.setBounds(172, 128, 385, 36);
 		contentPane.add(lnameField);
 
-		emailField = new JTextField();
-		emailField.setToolTipText("Input valid email that follow the standard format");
-		emailField.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		emailField.setColumns(10);
-		emailField.setBounds(172, 177, 385, 36);
-		contentPane.add(emailField);
-
-		// initialize buttons and set string values,dimension and design
-		JButton saveButton = new JButton("SAVE");
-		saveButton.setFont(new Font("Tahoma", Font.BOLD, 14));
-		saveButton.setBackground(new Color(60, 179, 113));
-		saveButton.setForeground(Color.WHITE);
-		saveButton.setBounds(346, 296, 97, 41);
-		contentPane.add(saveButton);
+		houseField = new JTextField();
+		houseField.setToolTipText("Input valid email that follow the standard format");
+		houseField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		houseField.setColumns(10);
+		houseField.setBounds(172, 251, 385, 36);
+		contentPane.add(houseField);
 
 		JButton btnCancel = new JButton("EXIT");
 		btnCancel.setForeground(Color.WHITE);
 		btnCancel.setFont(new Font("Tahoma", Font.BOLD, 14));
 		btnCancel.setBackground(new Color(192, 192, 192));
-		btnCancel.setBounds(460, 296, 97, 41);
+		btnCancel.setBounds(478, 646, 97, 41);
 		contentPane.add(btnCancel);
+		
+		streetField = new JTextField();
+		streetField.setToolTipText("Input valid email that follow the standard format");
+		streetField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		streetField.setColumns(10);
+		streetField.setBounds(172, 300, 385, 36);
+		contentPane.add(streetField);
+		
+		mNameField = new JTextField();
+		mNameField.setToolTipText("Input valid email that follow the standard format");
+		mNameField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		mNameField.setColumns(10);
+		mNameField.setBounds(172, 176, 385, 36);
+		contentPane.add(mNameField);
+		
+		cityField = new JTextField();
+		cityField.setToolTipText("Input valid email that follow the standard format");
+		cityField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		cityField.setColumns(10);
+		cityField.setBounds(172, 349, 385, 36);
+		contentPane.add(cityField);
+		
+		countryField = new JTextField();
+		countryField.setToolTipText("Input valid email that follow the standard format");
+		countryField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		countryField.setColumns(10);
+		countryField.setBounds(172, 398, 385, 36);
+		contentPane.add(countryField);
+		
+		lblHouseNo = new JLabel("House No:");
+		lblHouseNo.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblHouseNo.setBounds(32, 261, 117, 16);
+		contentPane.add(lblHouseNo);
+		
+		lblStreet = new JLabel("Street:");
+		lblStreet.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblStreet.setBounds(32, 310, 117, 16);
+		contentPane.add(lblStreet);
+		
+		lblCity = new JLabel("City:");
+		lblCity.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblCity.setBounds(32, 359, 117, 16);
+		contentPane.add(lblCity);
+		
+		lblCountry = new JLabel("Country:");
+		lblCountry.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblCountry.setBounds(32, 408, 117, 16);
+		contentPane.add(lblCountry);
+		
+		canborrowLbl = new JLabel("Can Borrow:");
+		canborrowLbl.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		canborrowLbl.setBounds(32, 487, 117, 16);
+		contentPane.add(canborrowLbl);
+		
+		lblPassword = new JLabel("No. of Borrowed");
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblPassword.setBounds(32, 536, 128, 16);
+		contentPane.add(lblPassword);
+		
+		lblConfirm = new JLabel("Fine");
+		lblConfirm.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblConfirm.setBounds(32, 585, 117, 16);
+		contentPane.add(lblConfirm);
+		
+		lblUserDetails = new JLabel("Library Info");
+		lblUserDetails.setHorizontalAlignment(SwingConstants.CENTER);
+		lblUserDetails.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblUserDetails.setBounds(314, 447, 117, 16);
+		contentPane.add(lblUserDetails);
+		
+		lblMiddleName = new JLabel("Middle Name:");
+		lblMiddleName.setHorizontalAlignment(SwingConstants.LEFT);
+		lblMiddleName.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblMiddleName.setBounds(32, 185, 117, 16);
+		contentPane.add(lblMiddleName);
+		
+		JButton saveButton = new JButton("Update User");
+		saveButton.setForeground(Color.WHITE);
+		saveButton.setFont(new Font("Tahoma", Font.BOLD, 14));
+		saveButton.setBackground(new Color(60, 179, 113));
+		saveButton.setBounds(270, 646, 172, 41);
+		contentPane.add(saveButton);
+		
+		fineField = new JTextField();
+		fineField.setToolTipText("Input valid email that follow the standard format");
+		fineField.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		fineField.setColumns(10);
+		fineField.setBounds(172, 575, 385, 36);
+		contentPane.add(fineField);
+		borrowComboBox = new JSpinner();
+		numComboBox = new JSpinner();
+		borrowComboBox.setModel(new SpinnerListModel(new String[] {"true", "false"}));
+		borrowComboBox.setBounds(172, 478, 385, 36);
+		contentPane.add(borrowComboBox);
 
-		// save button
+		numComboBox.setModel(new SpinnerNumberModel(0, 0, 2, 1));
+		numComboBox.setBounds(172, 527, 385, 36);
+		contentPane.add(numComboBox);
+
+		// create random object - r for the membership id
+		Random r = new Random();	
+
 		saveButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -131,30 +234,24 @@ public class UpdateWindow extends JFrame implements InputValidator {
 				if (response == 0) {
 					if (i >= 0) {
 						try { // based on selected row check each values if there is an error
-							String currentValue = (String) memtypeSpinner.getValue();
-
-							// check if duplicate, if empty or if does not follow the format for name and
-							// email, if no error proceed in saving
-							if (!Dashboard.ifNotDuplicate("MemberID")) {
-								JOptionPane.showMessageDialog(null, "There is a duplicate email", "Duplicate",
-										JOptionPane.ERROR_MESSAGE);
-							} else if (fnameField.getText().trim().equals("") || lnameField.getText().equals("")
-									|| emailField.getText().equals("")) {
+							if (fnameField.getText().trim().equals("") || lnameField.getText().equals("")
+									|| houseField.getText().equals("")) {
 								JOptionPane.showMessageDialog(null, "Please input required information.", "Null",
 										JOptionPane.ERROR_MESSAGE);
-							} else if (!Dashboard.isFirstNameValid(fnameField.getText())) {
-								JOptionPane.showMessageDialog(null,
-										"Please input a valid First Name that starts with capital letter.",
-										"Input Error", JOptionPane.WARNING_MESSAGE);
-							} else if (!Dashboard.isLastNameValid(lnameField.getText())) {
-								JOptionPane.showMessageDialog(null,
-										"Please input a valid Last Name that starts with capital letter.",
-										"Input Error", JOptionPane.WARNING_MESSAGE);
-							}  else {
-								Dashboard.model.setValueAt(fnameField.getText(), i, 1);
-								Dashboard.model.setValueAt(lnameField.getText(), i, 2);
-								Dashboard.model.setValueAt(emailField.getText(), i, 3);
-								Dashboard.model.setValueAt(currentValue, i, 4);
+							}else {
+								String canBorrow = String.valueOf(borrowComboBox.getValue());
+								String numOfBorrow = String.valueOf(numComboBox.getValue());
+								Dashboard.model.setValueAt(fnameField.getText(), i, 2);
+								Dashboard.model.setValueAt(lnameField.getText(), i, 3);
+								Dashboard.model.setValueAt(mNameField.getText(), i, 4);
+								Dashboard.model.setValueAt(houseField.getText(), i, 5);
+								Dashboard.model.setValueAt(streetField.getText(), i, 6);
+								Dashboard.model.setValueAt(cityField.getText(), i, 7);
+								Dashboard.model.setValueAt(countryField.getText(), i, 8);
+								Dashboard.model.setValueAt(canBorrow, i, 9);
+								Dashboard.model.setValueAt(numOfBorrow, i,10);
+								Dashboard.model.setValueAt(fineField.getText(), i, 11);
+
 							}
 						} catch (NullPointerException e2) {
 						}
@@ -166,7 +263,8 @@ public class UpdateWindow extends JFrame implements InputValidator {
 				}
 			}
 		});
-		// same as other cancel button
+		
+		// cancel button - same as other windows
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int response = JOptionPane.showConfirmDialog(rootPane, "Exit Update Window?", "Confirm exit",
@@ -178,5 +276,5 @@ public class UpdateWindow extends JFrame implements InputValidator {
 
 			}
 		});
-	}
+		}
 }
